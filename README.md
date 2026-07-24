@@ -73,19 +73,6 @@ Run the application
 ```bash
 python main.py
 ```
-
----
-
-## 📸 Screenshots
-
-### Home Screen
-
-(Add screenshot here)
-
-### Prediction Result
-
-(Add screenshot here)
-
 ---
 
 ## 📊 Model Performance
