@@ -30,18 +30,21 @@ A Machine Learning-based application that detects phishing emails using Natural 
 
 ## 📂 Project Structure
 
-```
 Phishing-Email-Detection/
 │
 ├── dataset/
-├── models/
+│   └── emails.csv
+│
 ├── screenshots/
-├── main.py
-├── train_model.py
-├── predict.py
+│   └── result.png
+│
+├── src/
+│   └── phishing_detector.py
+│
 ├── requirements.txt
-└── README.md
-```
+├── README.md
+├── LICENSE
+└── .gitignore
 
 ---
 
