@@ -18,19 +18,17 @@ A Python desktop app that classifies pasted email text as **likely safe** or **p
 
 ### 1. Safe email example
 
-The meeting reminder below was classified as **LIKELY SAFE**, with a model-estimated phishing probability of 12.5%.
+The meeting reminder was classified as **LIKELY SAFE**, with a model-estimated phishing probability of 12.5%.
 
-![Safe email test screenshot](safe-email-test.png)
+![Safe email test screenshot](phishing-test-1.png)
 
 ### 2. Phishing email example
 
 The urgent message asking for a password and promising a reward was classified as **POSSIBLE PHISHING**, with a model-estimated phishing probability of 75.9%.
 
-![Phishing email test screenshot](phishing-email-test.png)
+![Phishing email test screenshot](phishing-test-2.png)
 
-**Screenshot setup:** Upload the two PNG screenshots to the repository root using these exact filenames: `safe-email-test.png` and `phishing-email-test.png`. The images will display in this section once the files exist in the repository.
-
-> Predictions and probabilities are only triage hints. Verify sender addresses, links, and requests independently.
+> Predictions and probabilities are only triage hints. Verify sender addresses, links, and requests independently. The bundled dataset is extremely small, so the displayed metrics are not meaningful evidence of real-world performance.
 
 ## 🧰 Built With
 
@@ -46,8 +44,8 @@ Phishing-Email-Detection/
 ├── emails.csv                 # Small example dataset (text,label)
 ├── phishing_detector.py       # Model training and GUI
 ├── requirements.txt           # Python dependencies
-├── safe-email-test.png        # Safe email demo screenshot (upload required)
-├── phishing-email-test.png    # Phishing email demo screenshot (upload required)
+├── phishing-test-1.png        # Safe email test screenshot
+├── phishing-test-2.png        # Phishing email test screenshot
 ├── README.md
 ├── LICENSE
 └── .gitignore
