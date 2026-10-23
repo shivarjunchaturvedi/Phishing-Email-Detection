@@ -21,9 +21,21 @@ A Python desktop application that classifies pasted email text as **phishing** o
 - scikit-learn
 - Tkinter (usually included with Python on Windows)
 
-## 🖼️ Application Preview
+## 🖼️ Application Demo
 
-![Phishing Email Detection application preview](result.png)
+### Safe email test
+
+A routine meeting reminder is classified as **LIKELY SAFE** in this example. The model estimated a 12.5% phishing probability.
+
+![Safe email classification demo](safe-email-test.jpg)
+
+### Phishing email test
+
+An urgent message asking for a password and promising a reward is classified as **POSSIBLE PHISHING**. The model estimated a 75.9% phishing probability and flagged urgency/credential/reward keywords.
+
+![Phishing email classification demo](phishing-email-test.jpg)
+
+> These are illustrative tests, not proof of detection accuracy. The probability is model-estimated and the bundled dataset is extremely small.
 
 ## 📁 Project Structure
 
@@ -32,7 +44,8 @@ Phishing-Email-Detection/
 ├── emails.csv                 # Small example dataset (text,label)
 ├── phishing_detector.py       # Model training and GUI
 ├── requirements.txt            # Python dependencies
-├── result.png                  # Application screenshot
+├── safe-email-test.jpg         # Safe email test screenshot
+├── phishing-email-test.jpg     # Phishing email test screenshot
 ├── README.md
 ├── LICENSE
 └── .gitignore
