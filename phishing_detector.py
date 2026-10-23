@@ -1,15 +1,15 @@
 """Phishing Email Detection — educational local text classifier.
 
-The program trains a TF-IDF + Multinomial Naive Bayes model from emails.csv.
+Trains a TF-IDF + Multinomial Naive Bayes model from emails.csv.
 Email text is analyzed locally; no email is sent or uploaded.
-The bundled dataset is tiny and illustrative, so results are not production-grade.
+The bundled dataset is tiny and illustrative, not suitable for production decisions.
 """
 from __future__ import annotations
 
 import re
 from pathlib import Path
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import messagebox
 
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -17,9 +17,9 @@ from sklearn.metrics import (
     accuracy_score,
     classification_report,
     confusion_matrix,
+    f1_score,
     precision_score,
     recall_score,
-    f1_score,
 )
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
@@ -74,7 +74,7 @@ def load_dataset(path: Path = DATASET_PATH) -> pd.DataFrame:
     return data
 
 
-def train_model(data: pd.DataFrame) -> tuple[Pipeline, dict[str, float], str]:
+def train_model(data: pd.DataFrame) -> tuple[Pipeline, dict[str, float], str, str]:
     """Split before vectorization to avoid fitting TF-IDF on held-out texts."""
     X_train, X_test, y_train, y_test = train_test_split(
         data["text"],
@@ -103,8 +103,13 @@ def train_model(data: pd.DataFrame) -> tuple[Pipeline, dict[str, float], str]:
         "recall": recall_score(y_test, predictions, pos_label="phishing", zero_division=0),
         "f1": f1_score(y_test, predictions, pos_label="phishing", zero_division=0),
     }
-    report = classification_report(y_test, predictions, zero_division=0)
-    return model, metrics, report
+    report = classification_report(y_test, predictions, labels=["phishing", "safe"], zero_division=0)
+    matrix = confusion_matrix(y_test, predictions, labels=["phishing", "safe"])
+    matrix_text = (
+        "Rows = actual; columns = predicted; label order = phishing, safe\n"
+        f"{matrix}"
+    )
+    return model, metrics, report, matrix_text
 
 
 def inspect_email(text: str, model: Pipeline) -> tuple[str, list[str], float | None]:
@@ -225,8 +230,10 @@ class PhishingDetectorApp:
             lines.extend(f"• {reason}" for reason in reasons)
         else:
             lines.append("No keyword/URL heuristic flags found.")
-        lines.append("")
-        lines.append("Do not treat this prediction as proof. Check the sender address, destination URL, and requests independently.")
+        lines.extend([
+            "",
+            "Do not treat this prediction as proof. Check the sender address, destination URL, and requests independently.",
+        ])
 
         self.result_body.configure(state="normal")
         self.result_body.delete("1.0", "end")
@@ -244,7 +251,7 @@ class PhishingDetectorApp:
 def main() -> None:
     try:
         data = load_dataset()
-        model, metrics, report = train_model(data)
+        model, metrics, report, matrix_text = train_model(data)
     except (OSError, ValueError, pd.errors.ParserError) as exc:
         root = tk.Tk()
         root.withdraw()
@@ -256,8 +263,7 @@ def main() -> None:
     print("Class distribution:\n", data["label"].value_counts().to_string())
     print("Holdout metrics:", {key: round(value, 3) for key, value in metrics.items()})
     print("Classification report (small holdout set; interpret cautiously):\n", report)
-    print("Confusion matrix (labels: phishing, safe):")
-    _, _, y_test_report = (None, None, None)  # Evaluation summary is printed above.
+    print("Confusion matrix:\n", matrix_text)
 
     root = tk.Tk()
     PhishingDetectorApp(root, model, metrics)
